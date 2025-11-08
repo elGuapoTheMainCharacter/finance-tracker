@@ -1,18 +1,73 @@
+
 body{
-  font-family: Arial,Helvetica,sans-serif;
-  margin: 0;
+  background: cyan;
 }
-h1,h2{
+.heading{
   text-align: center;
 }
-.inputSelection{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
+.balance{
+  display: grid;
+  text-align: center;
+  justify-content: center;
   
 }
-.inputSelection label{
-  front-weight:bold;
+.currentBalance{
+  display: flex;
+  border: 2px solid;
+  border-radius: 10%;
+}
+.income{
+  display: flex;
+  border-radius: 10%;
+  gap: 2px;
+}
+.currentSalary{
+  border: 2px solid;
+  display: grid;
+  border-radius: 10%;
+}
+.expenses{
+  border: 2px solid;
+  display: grid;
+  border-radius: 10%;
+}
+td{
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+  text-align: left;
+  justify-content: left;
+}
+th{
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  
+}
+tr,th{
+  padding: 65px;
+}
+table{
+  text-align: left;
+  justify-content: left;
+  
+}
+.userInput{
+  display: flex;
+  gap: 10px;
+}
+#expensesList{
+  border-bottom: 2px solid;
+  text-align: center;
+}
+.editSalaryBtn{
+  background-color:grey;
+}
+.yourBehaviorHeading{
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  text-align: center;
+}
+.yourExpenseHeading{
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  text-align: center;
 }
