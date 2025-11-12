@@ -1,9 +1,11 @@
 
 body{
-  background: cyan;
+  background: linear-gradient(350deg, lightblue,cyan);
 }
 .heading{
   text-align: center;
+  justify-content: center;
+  color:blue;
 }
 .balance{
   display: grid;
@@ -14,6 +16,7 @@ body{
 .currentBalance{
   display: flex;
   border: 2px solid;
+  border-bottom-color: purple
   border-radius: 10%;
 }
 .income{
@@ -59,7 +62,7 @@ table{
   text-align: center;
 }
 .editSalaryBtn{
-  background-color:grey;
+  background-color:blue;
 }
 .yourBehaviorHeading{
   border-bottom: 2px solid;
@@ -71,3 +74,22 @@ table{
   border-top: 2px solid;
   text-align: center;
 }
+h1,h2,p{
+  color:blue;
+}
+#addBtn{
+  background-color:green;
+}
+.userInput{
+  color:blue;
+}
+thead{
+  background-color: blue;
+}
+#totalAmount,tfoot{
+  background-color: red;
+}
+footer{
+  text-align: center;
+  background-color: blue;
+  }
