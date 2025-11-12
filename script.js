@@ -13,9 +13,10 @@ function formatCurrency(amount) {
 function updateTotal() {
     document.getElementById("totalAmount").textContent = formatCurrency(total);
     expensesValue.innerHTML=formatCurrency(total);
+    expensesValue.style.color="red";
     salary=document.getElementById("editCurrentSalary").innerHTML;
     document.getElementById("editCurrentBalance").innerHTML=parseInt(salary)-total;
-    console.log("salary is "+salary);
+    //console.log("salary is "+salary);
 }
 
 function addRow(itemName, itemPrice, category, date) {
@@ -27,10 +28,11 @@ function addRow(itemName, itemPrice, category, date) {
         <td>${category}</td>
         <td>${date}</td>
         <td>
-            <button class="deleteBtn">Delete</button>
+            <button id="deleteBtn" class="deleteBtn" >Delete</button>
             <button class="editBtn">Edit</button>
         </td>
     `;
+    
 
     // Add the row to the table
     tbody.appendChild(row);
@@ -164,5 +166,5 @@ editSalaryBtn.addEventListener('click', function() {
         editSalaryBtn.innerText = "Save";
     }
     document.getElementById("editCurrentBalance").innerHTML=document.getElementById("editCurrentSalary").innerHTML;
+    
 });
-
