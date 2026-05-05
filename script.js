@@ -1,170 +1,134 @@
-let total = 0; // Keeps track of the total amount of expenses.
-//update expenses//
-let expensesValue=document.getElementById("expensesValue");
-const tbody = document.querySelector("#expenseTable tbody"); // Table body where rows will go.
-const addBtn = document.getElementById('addBtn'); // Button to add a new expense.
-let salary="0";
-//update balance
-let balaeditCurrentBalanceValue=document.getElementById("editCurrentBalance").innerHTML;
+// --- STATE & INITIALIZATION ---
+let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+let salary = parseFloat(localStorage.getItem("salary")) || 0;
+let goal = parseFloat(localStorage.getItem("budgetGoal")) || 0;
+
+const tbody = document.querySelector("#expenseTable tbody");
+const currentSalary = document.getElementById("editCurrentSalary");
+const currentBalance = document.getElementById("editCurrentBalance");
+const expensesValue = document.getElementById("expensesValue");
+const budgetGoalInput = document.getElementById("budgetGoal");
+
+window.onload = () => {
+    currentSalary.innerText = salary;
+    budgetGoalInput.value = goal;
+    renderAll();
+    updateDashboard();
+};
+
 function formatCurrency(amount) {
-    return 'R' + amount.toFixed(2); // Example: R10.00
+    return 'R ' + parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
 }
 
-function updateTotal() {
+// --- CORE FUNCTIONS ---
+function updateDashboard() {
+    const total = expenses.reduce((sum, exp) => sum + exp.price, 0);
+    const balance = salary - total;
+
     document.getElementById("totalAmount").textContent = formatCurrency(total);
-    expensesValue.innerHTML=formatCurrency(total);
-    expensesValue.style.color="red";
-    salary=document.getElementById("editCurrentSalary").innerHTML;
-    document.getElementById("editCurrentBalance").innerHTML=parseInt(salary)-total;
-    //console.log("salary is "+salary);
+    expensesValue.innerHTML = total.toFixed(2);
+    currentBalance.innerHTML = balance.toFixed(2);
+    currentBalance.style.color = balance < 0 ? "#ef4444" : "white";
+
+    updateBehavior(total);
+    save();
 }
 
-function addRow(itemName, itemPrice, category, date) {
-    // Create a new row
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${itemName}</td>
-        <td>${formatCurrency(itemPrice)}</td>
-        <td>${category}</td>
-        <td>${date}</td>
-        <td>
-            <button id="deleteBtn" class="deleteBtn" >Delete</button>
-            <button class="editBtn">Edit</button>
-        </td>
+function updateBehavior(total) {
+    const behaviorBox = document.querySelector(".yourBehavior");
+    const currentGoal = parseFloat(budgetGoalInput.value) || salary;
+    const percent = currentGoal > 0 ? (total / currentGoal) * 100 : 0;
+    
+    let color = "#10b981";
+    if (percent > 90) color = "#ef4444";
+    else if (percent > 70) color = "#f59e0b";
+
+    behaviorBox.innerHTML = `
+        <div class="analysis-card">
+            <h2 class="yourBehaviorHeading">Spending Behavior</h2>
+            <p>Status: <strong style="color:${color}">${percent > 100 ? 'OVER BUDGET' : 'On Track'}</strong></p>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${Math.min(percent, 100)}%; background: ${color}"></div>
+            </div>
+            <p>${percent.toFixed(1)}% of your R${currentGoal} goal used.</p>
+        </div>
     `;
-    
-
-    // Add the row to the table
-    tbody.appendChild(row);
-
-    // Update the total expense
-    total += itemPrice;
-    
-    updateTotal();
 }
 
-function deleteRow(row, price) {
-    tbody.removeChild(row); // Remove the row from the table
-    total -= price; // Subtract the price from the total
-    updateTotal(); // Update the total display
+function renderAll() {
+    tbody.innerHTML = "";
+    expenses.forEach(exp => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${exp.name}</td>
+            <td>${formatCurrency(exp.price)}</td>
+            <td><span class="category-tag">${exp.category}</span></td>
+            <td>${exp.date}</td>
+            <td><button class="deleteBtn" onclick="deleteExp(${exp.id})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+    });
 }
 
-function editRow(row) {
-    const cells = row.querySelectorAll('td');
-    const nameCell = cells[0];
-    const priceCell = cells[1];
-    const categoryCell = cells[2];
-    const dateCell = cells[3];
-
-    // Allow the user to edit the row's data directly
-    nameCell.contentEditable = true;
-    priceCell.contentEditable = true;
-    categoryCell.contentEditable = true;
-    dateCell.contentEditable = true;
-
-    // Change the "Edit" button to "Save"
-    const editBtn = row.querySelector('.editBtn');
-    editBtn.textContent = 'Save';
-
-    // When "Save" is clicked, update the row with the new values
-    editBtn.onclick = function () {
-        nameCell.contentEditable = false;
-        priceCell.contentEditable = false;
-        categoryCell.contentEditable = false;
-        dateCell.contentEditable = false;
-
-        // Get new values and update the table
-        const newName = nameCell.textContent;
-        const newPrice = parseFloat(priceCell.textContent.replace(/[^\d.-]/g, ''));
-        const newCategory = categoryCell.textContent;
-        const newDate = dateCell.textContent;
-
-        // Update the total amount (subtract old price, add new price)
-        const oldPrice = parseFloat(priceCell.textContent.replace(/[^\d.-]/g, ''));
-        total = total - oldPrice + newPrice;
-        updateTotal();
-
-        // Update the row with the new values
-        nameCell.textContent = newName;
-        priceCell.textContent = formatCurrency(newPrice);
-        categoryCell.textContent = newCategory;
-        dateCell.textContent = newDate;
-
-        // Change the "Save" button back to "Edit"
-        editBtn.textContent = 'Edit';
-        editBtn.onclick = function () {
-            editRow(row); // If the user clicks again, start editing again
-        };
-    };
-}
-
-// Add event listener to the "Add Expense" button
-addBtn.addEventListener('click', function () {
-    const itemName = document.getElementById('itemName').value;
-    const itemPrice = parseFloat(document.getElementById('itemPrice').value);
-    const category = document.getElementById('category').value;
+// --- INTERACTION ---
+document.getElementById('addBtn').addEventListener('click', () => {
+    const name = document.getElementById('itemName').value;
+    const price = parseFloat(document.getElementById('itemPrice').value);
+    const cat = document.getElementById('category').value;
     const date = document.getElementById('buyDate').value;
-    //force user to input salary informstion first
-    const salaryValue=document.getElementById("editCurrentSalary").innerText;
-    //const balance value=document.getElementById("editCurrentBalance").value;
-    if(parseInt(salaryValue)<=0){
-        alert("Please fill in salary field first")
-        return;
-    }
-    //console.log("salary is a "+typeof(parseInt(salaryValue)));
-    // Validate inputs
-    if (!itemName || isNaN(itemPrice) || itemPrice <= 0 || !category || !date) {
-        alert("Please fill in all expense fields with valid data.");
-        return;
-    }
 
-    // Add the new row to the table
-    addRow(itemName, itemPrice, category, date);
+    if (salary <= 0) return alert("Set salary first!");
+    if (!name || isNaN(price) || !date) return alert("Fill all fields!");
 
-    // Clear the input fields after adding
-    document.getElementById('itemName').value = '';
-    document.getElementById('itemPrice').value = '';
-    document.getElementById('category').value = '';
-    document.getElementById('buyDate').value = '';
+    expenses.push({ id: Date.now(), name, price, category: cat, date });
+    renderAll();
+    updateDashboard();
+    document.querySelectorAll('.userInput input').forEach(i => i.value = "");
 });
 
-// Event delegation for handling delete and edit actions
-tbody.addEventListener('click', function (event) {
-    const target = event.target;
+function deleteExp(id) {
+    expenses = expenses.filter(e => e.id !== id);
+    renderAll();
+    updateDashboard();
+}
 
-    // If it's a "Delete" button, remove the row
-    if (target.classList.contains('deleteBtn')) {
-        const row = target.closest('tr'); // Get the closest row to the delete button
-        const price = parseFloat(row.cells[1].textContent.replace(/[^\d.-]/g, ''));
-        deleteRow(row, price); // Call deleteRow function
-    }
-
-    // If it's an "Edit" button, start editing the row
-    if (target.classList.contains('editBtn')) {
-        const row = target.closest('tr'); // Get the closest row to the edit button
-        editRow(row); // Call editRow function
-    }
-});
-//edit and update salary
-let currentBalance = document.getElementById("editCurrentBalance");
-let currentSalary = document.getElementById("editCurrentSalary");
-
-const editSalaryBtn = document.getElementById("editSalaryBtn");
-
-editSalaryBtn.addEventListener('click', function() {
-    let isEditable = currentBalance.contentEditable === "true" || currentSalary.contentEditable === "true";
-    
-    if (isEditable) {
-        // If the elements are already editable, change them back to not editable
-        //currentBalance.contentEditable = "false";
+document.getElementById('editSalaryBtn').addEventListener('click', function() {
+    const isEdit = currentSalary.contentEditable === "true";
+    if (isEdit) {
+        salary = parseFloat(currentSalary.innerText) || 0;
         currentSalary.contentEditable = "false";
-        editSalaryBtn.innerText = "Edit"; 
+        this.innerText = "Edit Salary";
+        updateDashboard();
     } else {
-        // If not, make them editable
-        //currentBalance.contentEditable = "true";
         currentSalary.contentEditable = "true";
-        editSalaryBtn.innerText = "Save";
+        currentSalary.focus();
+        this.innerText = "Save";
     }
-    document.getElementById("editCurrentBalance").innerHTML=document.getElementById("editCurrentSalary").innerHTML;
-    
 });
+
+// --- UTILITIES ---
+document.getElementById('searchInput').addEventListener('keyup', (e) => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('#expenseTable tbody tr').forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
+    });
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+    let csv = "Item,Price,Category,Date\n" + expenses.map(e => `${e.name},${e.price},${e.category},${e.date}`).join("\n");
+    const link = document.createElement("a");
+    link.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+    link.download = "expenses.csv";
+    link.click();
+});
+
+budgetGoalInput.addEventListener('input', () => {
+    goal = parseFloat(budgetGoalInput.value) || 0;
+    updateDashboard();
+});
+
+function save() {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+    localStorage.setItem("salary", salary);
+    localStorage.setItem("budgetGoal", goal);
+}
