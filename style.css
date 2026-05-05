@@ -1,223 +1,57 @@
 :root {
   --primary: #2563eb;
-  --secondary: #64748b;
   --success: #10b981;
   --danger: #ef4444;
   --background: #f8fafc;
   --card-bg: #ffffff;
-  --text-main: #1e293b;
-  --text-light: #64748b;
   --border: #e2e8f0;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--background);
-  color: var(--text-main);
-  margin: 0;
   padding: 20px;
-  line-height: 1.5;
 }
 
-.heading {
-  text-align: center;
-  font-weight: 800;
-  font-size: 2.5rem;
-  color: var(--primary);
-  margin-bottom: 2rem;
-  letter-spacing: -0.025em;
-}
+.heading { text-align: center; color: var(--primary); font-size: 2.5rem; }
 
 .balance {
-  max-width: 800px;
-  margin: 0 auto 2rem;
-  display: grid;
-  gap: 20px;
-  background: var(--card-bg);
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
+  max-width: 800px; margin: 0 auto 2rem;
+  background: var(--card-bg); padding: 24px;
+  border-radius: 16px; box-shadow: var(--shadow);
 }
 
 .currentBalance {
   background: linear-gradient(135deg, var(--primary), #1d4ed8);
-  padding: 20px;
-  border-radius: 12px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  padding: 20px; border-radius: 12px; color: white;
+  text-align: center; margin-bottom: 15px;
 }
 
-.currentBalance h2 {
-  color: white;
-  margin: 0;
-}
-
-.income {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.currentSalary, .expenses {
-  padding: 15px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  text-align: center;
-  background: #f1f5f9;
-}
-
-.currentSalary h2, .expenses h2 {
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--secondary);
-  margin-bottom: 5px;
-}
-
-.editSalaryBtn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.editSalaryBtn:hover {
-  opacity: 0.9;
-}
-
-.yourExpenseHeading {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-top: 2rem;
-  color: var(--text-main);
-}
+.income { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.currentSalary, .expenses { padding: 15px; background: #f1f5f9; border-radius: 12px; text-align: center; }
 
 .userInput {
-  max-width: 900px;
-  margin: 20px auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 20px;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  align-items: flex-end;
-  justify-content: center;
+  max-width: 900px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px;
+  padding: 20px; background: white; border-radius: 12px; box-shadow: var(--shadow);
+  align-items: flex-end; justify-content: center;
 }
 
-.userInput div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.table-controls {
+    max-width: 900px; margin: 20px auto; display: flex; justify-content: space-between;
 }
 
-input, select {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-}
+#searchInput { width: 70%; padding: 10px; border-radius: 20px; border: 1px solid var(--border); }
 
-input:focus, select:focus {
-  border-color: var(--primary);
-}
+table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f8fafc; font-size: 0.75rem; color: #64748b; }
 
-#addBtn {
-  background: var(--success);
-  color: white;
-  border: none;
-  padding: 10px 25px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
+.category-tag { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
 
-#expensesList {
-  text-align: center;
-  margin: 2rem 0 1rem;
-  font-weight: 600;
-  color: var(--secondary);
-}
+.analysis-card { background: white; padding: 20px; border-radius: 12px; box-shadow: var(--shadow); max-width: 800px; margin: 20px auto; }
+.progress-bar-bg { background: #e2e8f0; height: 12px; border-radius: 10px; margin: 10px 0; overflow: hidden; }
+.progress-bar-fill { height: 100%; transition: width 0.5s ease; }
 
-.table {
-  max-width: 900px;
-  margin: 0 auto;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-bg);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-
-thead {
-  background: #f8fafc;
-}
-
-th {
-  text-align: left;
-  padding: 16px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--secondary);
-  border-bottom: 1px solid var(--border);
-}
-
-td {
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-main);
-  background: white !important; /* Overriding your inline style for professionalism */
-}
-
-tfoot {
-  font-weight: bold;
-  background: #f1f5f9;
-}
-
-tfoot td {
-  background: #f1f5f9 !important;
-}
-
-#totalAmount {
-  color: var(--danger);
-  font-size: 1.2rem;
-}
-
-.deleteBtn, .editBtn {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  font-size: 12px;
-  margin-right: 5px;
-}
-
-.deleteBtn { background-color: var(--danger); }
-.editBtn { background-color: var(--primary); }
-
-footer {
-  margin-top: 3rem;
-  padding: 2rem;
-  text-align: center;
-  color: var(--secondary);
-  font-size: 0.875rem;
-  border-top: 1px solid var(--border);
-                                                                }
-  
+.deleteBtn { background: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+.editSalaryBtn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
