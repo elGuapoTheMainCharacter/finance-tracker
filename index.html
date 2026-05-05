@@ -1,95 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" href="style.css"/>
-  <title>Money Tracker</title>
-  
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Money Trekker - Advanced</title>
 </head>
 <body>
-  <h1 class="heading">
-    Money Trekker
-  </h1>
+    <h1 class="heading">Money Trekker</h1>
 
-
-  <div class="balance" id="balance">
-    <div class="currentBalance">
-      <h2>Balance: R</h2>
-      <h2 id="editCurrentBalance" contenteditable="false">0</h2>
+    <div class="balance" id="balance">
+        <div class="currentBalance">
+            <h2>Balance: R</h2>
+            <h2 id="editCurrentBalance">0.00</h2>
+        </div>
+        <div class="income">
+            <div class="currentSalary">
+                <h2>Current Salary: R</h2>
+                <h2 id="editCurrentSalary" contenteditable="false">0</h2>
+            </div>
+            <div class="expenses">
+                <h2>Expenses: R</h2>
+                <h2 id="expensesValue">0.00</h2>
+            </div>
+        </div>
+        <button class="editSalaryBtn" id="editSalaryBtn">Edit Salary</button>
     </div>
-    <div class="income">
-      <div class="currentSalary">
-        <h2>Current salary: R</h2>
-        <h2 id="editCurrentSalary" contenteditable="false">0</h2>
-      </div>
-      <div class="expenses">
-        <h2>Expenses: R</h2>
-        <h2 id="expensesValue" contenteditable="false">0</h2>
-      </div>
+
+    <div class="userInput">
+        <div>
+            <label for="itemName">Item Name:</label>
+            <input id="itemName" type="text" placeholder="Item name">
+        </div>
+        <div>
+            <label for="itemPrice">Price:</label>
+            <input id="itemPrice" type="number" placeholder="0.00">
+        </div>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category">
+                <option value="grocery">Grocery</option>
+                <option value="transport">Transport</option>
+                <option value="rent">Rent</option>
+                <option value="clothes">Clothes</option>
+                <option value="college">College</option>
+            </select>
+        </div>
+        <div>
+            <label for="buyDate">Date:</label>
+            <input id="buyDate" type="date">
+        </div>
+        <div>
+            <label for="budgetGoal">Limit: R</label>
+            <input id="budgetGoal" type="number" placeholder="Budget Goal">
+        </div>
+        <button id="addBtn">Add</button>
     </div>
-    <button class="editSalaryBtn" id="editSalaryBtn">Edit</button>
-  </div>
-  
-  <br>
-  
-  
-  <!-- Expense Input Section -->
-  <h2 class="yourExpenseHeading">Your Expenses</h2>
-   
-  <div class="userInput">
-     <label for="itemName">Item Name:</label>
-    <input id="itemName" type="text" placeholder="Item name">
-    <label for="itemPrice">Price:</label>
-    <input id="itemPrice" type="number" placeholder="Price">
-    <label for="category">Category:</label>
-    <select class="category" id="category">
-      <option value="grocery">Grocery</option>
-      <option value="transport">Transport</option>
-      <option value="rent">Rent</option>
-      <option value="clothes">Clothes</option>
-      <option value="college">College</option>
-    </select>
-    <label for="buyDate">Date:</label>
-    <input id="buyDate" type="date">
-    <button id="addBtn">Add</button>
-  </div>
 
-  <br>
+    <div class="table-controls">
+        <input type="text" id="searchInput" placeholder="Search expenses...">
+        <button id="exportBtn" class="editSalaryBtn">Download CSV</button>
+    </div>
 
-  <!-- Expenses Table Section -->
-  <h3 id="expensesList">Expenses list</h3>
-  <div class="table">
-    <table id="expenseTable">
-      <thead>
-        <tr>
-          <th>Item name</th>
-          <th>Price</th>
-          <th>Category</th>
-          <th>Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Expense entries will go here -->
-      </tbody>
-      <tfoot>
-        <tr>
-          <td>Total</td>
-          <td id="totalAmount">0</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <br>
-  
-  <div class="yourBehavior">
-    <h2 class="yourBehaviorHeading">Your Behavior</h2>
-  </div>
-  <footer>
-    &copy elGuapo 2025
-  </footer>
-  <script src="script.js"></script>
+    <div class="table">
+        <table id="expenseTable">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td id="totalAmount">R0.00</td>
+                    <td colspan="3"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="yourBehavior">
+        <!-- Dashboard Analysis injects here -->
+    </div>
+
+    <footer>
+        &copy; elGuapo 2025 | Financial Tracking System
+    </footer>
+
+    <script src="script.js"></script>
 </body>
-  </html>
-  
+</html>
